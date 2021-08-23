@@ -23,7 +23,7 @@ let itemsReducer = (state = initialState, action) => {
   case "POKEMONS_DETAILS":
     return {
       ...state,
-      details: [...state.details, action.details.data],
+      details: [action.details.data],
     }
   default:
     return state

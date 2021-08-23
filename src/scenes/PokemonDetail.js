@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { View, Text,Button, TouchableOpacity,StyleSheet, ScrollView } from 'react-native';
+import { View, Text,Button, TouchableOpacity,StyleSheet, ScrollView,Image } from 'react-native';
 import axios from 'axios';
 import {ThingsContext} from '../contexts/DetailedItem';
 
@@ -7,7 +7,7 @@ const PokemonDetail = ({ route, navigation }) => {
   const {state, dispatch} = useContext(ThingsContext)
   const { id } = route.params;
   const [detailResponse, setResponse] = useState(null)
-
+  console.log(id)
   useEffect(() => {
     axios.get(id)
       .then((response) => {
@@ -16,7 +16,7 @@ const PokemonDetail = ({ route, navigation }) => {
       .catch((error) => {
         console.log({error});
     });
-  }, []);
+  }, [id]);
 
   const detailPokemon = () => {
     dispatch({
@@ -29,17 +29,20 @@ const PokemonDetail = ({ route, navigation }) => {
 
   return(
     <View>
+      <View style={styles.buttonItem}>
+        <Image style={styles.tinyLogo} source={{uri: `${state?.details?.[0]?.sprites?.front_default}`}} />
+      </View>
       <TouchableOpacity style={styles.textBlueContainer} onPress={() => detailPokemon()}>
         <Text style={styles.textBlue}>
-          See pokemon Abilities, Forms,
+          Update pokemon Abilities, Forms,
         </Text>
       </TouchableOpacity>
-      <ScrollView style={{height: 400}}>
-        <View style={styles.textForm}>
-          <Text style={styles.textGrey}>
-            Abilities
-          </Text>
-        </View>
+      <View style={styles.textForm}>
+        <Text style={styles.textGrey}>
+          Abilities
+        </Text>
+      </View>
+      <ScrollView style={{height: 100}}>
         {state?.details?.[0]?.abilities?.map((detail, index) => (
           <View key={index} style={styles.buttonItem}>
             <Text style={styles.textBlue}>
@@ -47,11 +50,13 @@ const PokemonDetail = ({ route, navigation }) => {
             </Text>
           </View>
         ))}
-        <View style={styles.textForm}>
-          <Text style={styles.textGrey}>
-            Forms
-          </Text>
-        </View>
+      </ScrollView>
+      <View style={styles.textForm}>
+        <Text style={styles.textGrey}>
+          Forms
+        </Text>
+      </View>
+      <ScrollView style={{height: 100}}>
         {state?.details?.[0]?.forms?.map((detail, index) => (
           <View key={index} style={styles.buttonItem}>
             <Text style={styles.textBlue}>
@@ -98,6 +103,10 @@ const styles = StyleSheet.create({
     color: '#36454f',
     fontSize: 15,
     alignSelf: 'center',
+  },
+  tinyLogo: {
+    width: 60,
+    height: 60,
   },
 });
 
